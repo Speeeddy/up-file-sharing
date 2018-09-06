@@ -53,13 +53,13 @@ class ServiceRequests(Thread):
     			filesPending[receiver] = (fileName, sender)				# Will need to be modified to store more information
     			
     		else:
-    			AcknowledgeReceipt(connection, CustomMessage("noUser"))
+    			AcknowledgeReceipt(connection, CustomMessage="noUser")
 
     		# Now forward the file. Implement storage if user not online here.
     		
 
 def main():
-	os.chdir("/tmp")
+	os.chdir("/tmp/")
 	serverSocket = CreateServer(Ports=[20000,30000,40000,50000,60000], Listeners=20)		#Spawn server
 	threads = []
 
