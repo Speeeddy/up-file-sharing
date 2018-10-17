@@ -125,6 +125,10 @@ class FileTransfer(Resource):
 		else:
 			return "File not found", 404
 		
+@app.route('/')
+def index():
+	return "Hello world!"
+
 api.add_resource(FileTransfer, "/ft", '/ft/<string:name>/<string:sender>/<string:filename>')
 api.add_resource(FilePending, "/fp", "/fp/<string:name>")
 
