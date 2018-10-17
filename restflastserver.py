@@ -101,7 +101,32 @@ class FileTransfer(Resource):
 		
 	#@app.route('/ft', methods=['PUT'])
 	def put(self):
-		return "Invalid", 404	
+		# Authenticate
+		try:
+			parser = reqparse.RequestParser()
+			parser.add_argument("name")
+			parser.add_argument("sendto")
+			parser.add_argument("filename")
+			parser.add_argument("data")
+			args = parser.parse_args()
+			
+			name = args["name"]
+			receiver = args["sendto"]
+			filename = args["filename"]
+			dataBinaryEncoded = args["data"]
+			#not decoding b64 in server, do it in clientside
+			with open(filename, "wb") as g:
+				g.write(dataBinaryEncoded)
+				g.close()
+			
+			if pendingFileTable.get(receiver):
+				pendingFileTable[receiver].append((name, filename))
+			else:
+				pendingFileTable[receiver] = [(name, filename)]
+			
+			return "File uploaded", 200
+		except:			
+			return "Invalid", 404	
 
 	#@app.route('/ft', methods=['DELETE'])
 	def delete(self):
