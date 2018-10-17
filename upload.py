@@ -2,18 +2,18 @@ import requests
 import sys
 import base64
 
-if len(args) == 4:
-	sender = sys.args[1]
-	receiver = sys.args[2]
-	filename = sys.args[3]
+if len(sys.argv) == 4:
+	sender = sys.argv[1]
+	receiver = sys.argv[2]
+	filename = sys.argv[3]
 else:
-	print("Usage: python3 upload.py <Sender> <Receiver> <File name>"
-	sys.exit()
+	print("Usage: python3 upload.py <Sender> <Receiver> <File name>")
+	sys.exit(0)
 
-URL = "nipunsood.ooo/ft"
+URL = "http://nipunsood.ooo/ft"
 
 f = open(filename, "rb")
-filadata = base64.b64encode(f.read())
+filedata = base64.b64encode(f.read())
 
 DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}
 

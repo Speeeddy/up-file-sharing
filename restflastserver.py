@@ -59,12 +59,12 @@ class FileTransfer(Resource):
 		#if (args["sender"], args["filename"]) in pendingList:
 		if (sender, filename) in pendingList:
 			#load the file
-			with open(filename, "rb") as f:
-				dataBinary = f.read()
+			with open(filename, "r") as f:
+				dataB64 = f.read()
 			#b64data = base64.b64encode(dataBinary).decode()
 			
 			#not encoding here, as file must have come as b64 encoded, and saved as is
-			return jsonify({"file" : dataBinary})
+			return dataB64, 200
 		else:
 			return "Not found", 404
 
@@ -115,7 +115,7 @@ class FileTransfer(Resource):
 			filename = args["filename"]
 			dataBinaryEncoded = args["data"]
 			#not decoding b64 in server, do it in clientside
-			with open(filename, "wb") as g:
+			with open(filename, "w") as g:
 				g.write(dataBinaryEncoded)
 				g.close()
 			
