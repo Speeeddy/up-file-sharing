@@ -1,4 +1,4 @@
-from flask import Flask, Request
+from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask import jsonify
 import base64
@@ -86,7 +86,7 @@ class FileTransfer(Resource):
 			return "Bad request", 400
 		
 		#json data should contain base64 encoded file
-		dataBinaryEncoded = json.loads(jsonData)["file"]
+		dataBinaryEncoded = json.loads(request.jsonData)["file"]
 		#not decoding b64 in server, do it in clientside
 		with open(filename, "wb") as g:
 			g.write(dataBinaryEncoded)
@@ -102,42 +102,54 @@ class FileTransfer(Resource):
 	#@app.route('/ft', methods=['PUT'])
 	def put(self):
 		# Authenticate
-		try:
-			parser = reqparse.RequestParser()
-			parser.add_argument("name")
-			parser.add_argument("sendto")
-			parser.add_argument("filename")
-			parser.add_argument("data")
-			args = parser.parse_args()
-			
-			name = args["name"]
-			receiver = args["sendto"]
-			filename = args["filename"]
-			dataBinaryEncoded = args["data"]
-			#not decoding b64 in server, do it in clientside
-			with open(filename, "w") as g:
-				g.write(dataBinaryEncoded)
-				g.close()
-			
-			if pendingFileTable.get(receiver):
-				pendingFileTable[receiver].append((name, filename))
-			else:
-				pendingFileTable[receiver] = [(name, filename)]
-			
-			return "File uploaded", 200
-		except:			
-			return "Invalid", 404	
+	
+		#parser = reqparse.RequestParser()
+		#parser.add_argument("name")
+		#parser.add_argument("sendto")
+		#parser.add_argument("filename")
+		#parser.add_argument("data")
+		#args = parser.parse_args()
+		
+		args = request.get_json(force=True)
+		if args == None:
+			raise "JsonError"
+
+		name = args["name"]
+		receiver = args["sendto"]
+		filename = args["filename"]
+		dataBinaryEncoded = args["data"]
+		#not decoding b64 in server, do it in clientside
+		with open(filename, "w") as g:
+			g.write(dataBinaryEncoded)
+			g.close()
+		
+		if pendingFileTable.get(receiver):
+			pendingFileTable[receiver].append((name, filename))
+		else:
+			pendingFileTable[receiver] = [(name, filename)]
+		
+		return "File uploaded", 200
+	#except:			
+	#		return "Invalid", 404	
 
 	#@app.route('/ft', methods=['DELETE'])
 	def delete(self):
 		#send an explicit delete request when file received
 		# Authenticate
-		parser = reqparse.RequestParser()
-		parser.add_argument("name")
-		parser.add_argument("sender")
-		parser.add_argument("filename")
-		args = parser.parse_args()
+		#parser = reqparse.RequestParser()
+		#parser.add_argument("name")
+		#parser.add_argument("sender")
+		#parser.add_argument("filename")
+		#args = parser.parse_args()
 		
+		#name = args["name"]
+		#sender = args["sender"]
+		#filename = args["filename"]
+		
+		args = request.get_json(force=True)
+		if args == None:
+			raise "JsonError"
+
 		name = args["name"]
 		sender = args["sender"]
 		filename = args["filename"]
