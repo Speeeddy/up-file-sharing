@@ -1,18 +1,40 @@
 import requests
 import sys
 import base64
+sender=""
+receiver=""
+filename=""
+def setSender(s):
+	global sender
+	sender = s
 
-if len(sys.argv) == 4:
-	sender = sys.argv[1]
-	receiver = sys.argv[2]
-	filename = sys.argv[3]
-else:
-	print("Usage: python3 deleter.py <Sender> <Receiver> <File name>")
-	sys.exit(0)
+def setReceiver(r):
+	global receiver
+	receiver = r
 
-URL = "http://nipunsood.ooo/ft"
+def setFilename(f):
+	global filename
+	filename = f
+def main():
+	if len(sys.argv) == 4:
+		setSender(sys.argv[1])
+		setReceiver(sys.argv[2])
+		setFilename(sys.argv[3])
+	else:
+		print("Usage: python3 deleter.py <Sender> <Receiver> <File name>")
+		sys.exit(0)
+	runner()
 
-DATA = {"name":receiver, "sender":sender, "filename":filename}
+def runner():
+	global receiver
+	global filename
+	global sender
+	URL = "http://nipunsood.ooo/ft"
+	
+	DATA = {"name":receiver, "sender":sender, "filename":filename}
+	
+	req = requests.delete(url = URL, json = DATA)
+	print(req.text)
 
-req = requests.delete(url = URL, json = DATA)
-print(req.text)
+if __name__ == "__main__":
+	main()

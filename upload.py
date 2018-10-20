@@ -1,21 +1,43 @@
 import requests
 import sys
 import base64
+sender=""
+receiver=""
+filename=""
+def setSender(s):
+	global sender
+	sender = s
 
-if len(sys.argv) == 4:
-	sender = sys.argv[1]
-	receiver = sys.argv[2]
-	filename = sys.argv[3]
-else:
-	print("Usage: python3 upload.py <Sender> <Receiver> <File name>")
-	sys.exit(0)
+def setReceiver(r):
+	global receiver
+	receiver = r
 
-URL = "http://nipunsood.ooo/ft"
+def setFilename(f):
+	global filename
+	filename = f
 
-f = open(filename, "rb")
-filedata = base64.b64encode(f.read())
+def main():
+	if len(sys.argv) == 4:
+		setSender(sys.argv[1])
+		setReceiver(sys.argv[2])
+		setFilename(sys.argv[3])
+	else:
+		print("Usage: python3 upload.py <Sender> <Receiver> <File name>")
+		sys.exit(0)
+	runner()
 
-DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}
+def runner():
+	global receiver
+	global filename
+	global sender
+	URL = "http://nipunsood.ooo/ft"
+	f = open(filename, "rb")
+	filedata = base64.b64encode(f.read())
+	f.close()
+	DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}
+	req = requests.put(url = URL, json = DATA)
+	return req.text
 
-req = requests.put(url = URL, data = DATA)
-print(req.text)
+if __name__ == "__main__":
+	main()
+
