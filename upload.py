@@ -31,8 +31,11 @@ def runner():
 	global filename
 	global sender
 	URL = "http://nipunsood.ooo/ft"
-	f = open(filename, "rb")
-	filedata = base64.b64encode(f.read())
+	try:
+		f = open(filename, "rb")
+		filedata = base64.b64encode(f.read())
+	except:
+		return "Invalid"
 	f.close()
 	DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}
 	req = requests.put(url = URL, json = DATA)

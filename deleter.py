@@ -34,7 +34,7 @@ def runner():
 	DATA = {"name":receiver, "sender":sender, "filename":filename}
 	
 	req = requests.delete(url = URL, json = DATA)
-	print(req.text)
+	return req.text
 
 if __name__ == "__main__":
 	main()

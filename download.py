@@ -15,7 +15,7 @@ def main():
 		print("Usage: python3 download.py <Receiver>")
 		sys.exit(0)
 
-	runner()
+	runner()  	
 def runner():
 	global receiver
 	URLpending = "http://nipunsood.ooo/fp/"+receiver
@@ -25,7 +25,7 @@ def runner():
 	data = json.loads(reqGetPending.text)
 #print(data)
 #print(type(data))
-	if data:
+	if data!="0":
 		print("File found!")
 		for i in range(len(data)):
 			print(str(i+1) + ". Sender: " + data[i][0] + ", File name: " + data[i][1])
@@ -39,6 +39,8 @@ def runner():
 		f.write(fileData)
 		f.close()
 		print(data[index][1] + " successfully downloaded as rec_" + data[index][1])
+	else:
+		return "File not Found"
 
 '''
 f = open(filename, "rb")

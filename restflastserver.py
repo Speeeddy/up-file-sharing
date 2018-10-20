@@ -156,7 +156,8 @@ class FileTransfer(Resource):
 			filename = args["filename"]
 			
 			pendingList = pendingFileTable.get(name)
-			if (sender, filename) in pendingList:
+			
+			if pendingList and (sender, filename) in pendingList:
 				os.remove("UserFiles/"+filename)
 				pendingFileTable[name].remove((sender, filename))
 				return "File deleted", 200
