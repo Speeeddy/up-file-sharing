@@ -59,7 +59,7 @@ class FileTransfer(Resource):
 		#if (args["sender"], args["filename"]) in pendingList:
 		if (sender, filename) in pendingList:
 			#load the file
-			with open(filename, "r") as f:
+			with open("UserFiles/"+filename, "r") as f:
 				dataB64 = f.read()
 			#b64data = base64.b64encode(dataBinary).decode()
 			
@@ -70,6 +70,7 @@ class FileTransfer(Resource):
 
 	#@app.route('/ft', methods=['POST'])
 	def post(self):
+		# not in use, use PUT
 		# Authenticate
 		parser = reqparse.RequestParser()
 		parser.add_argument("name")
@@ -88,7 +89,7 @@ class FileTransfer(Resource):
 		#json data should contain base64 encoded file
 		dataBinaryEncoded = json.loads(request.jsonData)["file"]
 		#not decoding b64 in server, do it in clientside
-		with open(filename, "wb") as g:
+		with open("UserFiles/"+filename, "wb") as g:
 			g.write(dataBinaryEncoded)
 			g.close()
 		
@@ -119,7 +120,7 @@ class FileTransfer(Resource):
 		filename = args["filename"]
 		dataBinaryEncoded = args["data"]
 		#not decoding b64 in server, do it in clientside
-		with open(filename, "w") as g:
+		with open("UserFiles/"+filename, "w") as g:
 			g.write(dataBinaryEncoded)
 			g.close()
 		
@@ -156,7 +157,7 @@ class FileTransfer(Resource):
 		
 		pendingList = pendingFileTable.get(name)
 		if (sender, filename) in pendingList:
-			os.remove(filename)
+			os.remove("UserFiles/"+filename)
 			pendingFileTable[name].remove((sender, filename))
 			return "File deleted", 200
 		else:
