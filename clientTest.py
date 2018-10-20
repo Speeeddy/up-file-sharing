@@ -1,5 +1,6 @@
 import unittest
 import download
+import deleter
 import upload
 import requests
 
