@@ -110,28 +110,28 @@ class FileTransfer(Resource):
 		#parser.add_argument("filename")
 		#parser.add_argument("data")
 		#args = parser.parse_args()
-		
-		args = request.get_json(force=True)
-		if args == None:
-			raise "JsonError"
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
 
-		name = args["name"]
-		receiver = args["sendto"]
-		filename = args["filename"]
-		dataBinaryEncoded = args["data"]
-		#not decoding b64 in server, do it in clientside
-		with open("UserFiles/"+filename, "w") as g:
-			g.write(dataBinaryEncoded)
-			g.close()
-		
-		if pendingFileTable.get(receiver):
-			pendingFileTable[receiver].append((name, filename))
-		else:
-			pendingFileTable[receiver] = [(name, filename)]
-		
-		return "File uploaded", 200
-	#except:			
-	#		return "Invalid", 404	
+			name = args["name"]
+			receiver = args["sendto"]
+			filename = args["filename"]
+			dataBinaryEncoded = args["data"]
+			#not decoding b64 in server, do it in clientside
+			with open("UserFiles/"+filename, "w") as g:
+				g.write(dataBinaryEncoded)
+				g.close()
+			
+			if pendingFileTable.get(receiver):
+				pendingFileTable[receiver].append((name, filename))
+			else:
+				pendingFileTable[receiver] = [(name, filename)]
+			
+			return "File uploaded", 200
+		except:			
+			return "Invalid", 404	
 
 	#@app.route('/ft', methods=['DELETE'])
 	def delete(self):
@@ -146,23 +146,25 @@ class FileTransfer(Resource):
 		#name = args["name"]
 		#sender = args["sender"]
 		#filename = args["filename"]
-		
-		args = request.get_json(force=True)
-		if args == None:
-			raise "JsonError"
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
 
-		name = args["name"]
-		sender = args["sender"]
-		filename = args["filename"]
-		
-		pendingList = pendingFileTable.get(name)
-		if (sender, filename) in pendingList:
-			os.remove("UserFiles/"+filename)
-			pendingFileTable[name].remove((sender, filename))
-			return "File deleted", 200
-		else:
+			name = args["name"]
+			sender = args["sender"]
+			filename = args["filename"]
+			
+			pendingList = pendingFileTable.get(name)
+			if (sender, filename) in pendingList:
+				os.remove("UserFiles/"+filename)
+				pendingFileTable[name].remove((sender, filename))
+				return "File deleted", 200
+			else:
+				return "File not found", 404
+		except:
 			return "File not found", 404
-		
+					
 @app.route('/')
 def index():
 	return "Hello world!"
