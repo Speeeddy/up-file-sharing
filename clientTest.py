@@ -11,7 +11,7 @@ class ClientTest(unittest.TestCase):
 	def tearDown(self):
 		x=1
 
-	def test_pos_upload(self):
+	'''def test_pos_upload(self):
 		#positive test (upload)
 		upload.setSender("p")
 		upload.setReceiver("q")
@@ -36,7 +36,7 @@ class ClientTest(unittest.TestCase):
 		#negative test(file not stored in server)
 		resp1 = requests.get(url="http://nipunsood.ooo/fp/RandomUser")
 		self.assertEqual(resp1.text,'"0"\n')
-		
+'''
 	def test_pos_download(self):
 		upload.setSender("r")
 		upload.setReceiver("c")

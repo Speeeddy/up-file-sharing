@@ -1,5 +1,4 @@
 import unittest
-#import restflastserver as server
 import requests
 import base64
 
@@ -14,21 +13,35 @@ class testMethods(unittest.TestCase):
 	def test_get(self):
 		#negative test
 		name = "yasifx"
-		obj1=server.FilePending()
-		self.assertEqual(obj1.get(name),('0',404))
+		#obj1=server.FilePending()
+		#self.assertEqual(obj1.get(name),('0',404))
 
 		#positive test
-		sender = "nipunxx"
+		sender = "sid"
 		receiver = "yasifx"
-		filename = "he.jpg"
+		filename = "Assignment.pdf"
+
+		#Upload
 		f = open(filename,"rb")
 		URL = "http://nipunsood.ooo/ft"
 		filedata = base64.b64encode(f.read())
 		f.close()
 		DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}	
-		req = requests.put(url = URL, data = DATA)
-		obj2=server.FilePending()
-		self.assertNotEqual(obj2.get(receiver),('0',404))
+		req = requests.put(url = URL, json = DATA)
+		print(req.text)
+		
+		#Get Pending
+		URL = "http://nipunsood.ooo/fp/yasifx"
+		req = requests.get(url = URL)
+		print(req.text)
+
+		#Download
+		URL = "http://nipunsood.ooo/ft/yasifx/sid/he.jpg"
+		req = requests.get(url = URL)
+		print(req.text)
+
+		#obj2=server.FilePending()
+		#self.assertNotEqual(obj2.get(receiver),('0',404))
 	
 	def test_put(self):
 		self.assertFalse(1==2)
