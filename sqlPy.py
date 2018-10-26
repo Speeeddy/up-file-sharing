@@ -1,18 +1,20 @@
-import PyMySQL
+# Not injection-secure
+
+import pymysql
 
 dbPassFile = open("DBPass.txt", "r")
-dbPass = dbPassFile.read()
-
+dbPass = dbPassFile.read().strip()
+print("Password is '" + dbPass + "'")
 
 def insertFilePending(sender, receiver, filename, filehash):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO FilePending (SENDER, RECEIVER, FILE_NAME, FILE_HASH) VALUES ('%s', '%s', '%s', '%s');"
-		n = cursor.execute(sql, (sender, receiver, filename, filehash))
+		sql = "INSERT INTO FilePending (SENDER, RECEIVER, FILE_NAME, FILE_HASH) VALUES ('{}','{}','{}','{}');".format(sender, receiver, filename, filehash)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in insert file")
+	except Exception as e:
+		print("DB error in insert file: " + str(e))
 		db.rollback()
 		db.close()
 		return False
@@ -21,14 +23,14 @@ def insertFilePending(sender, receiver, filename, filehash):
 	
 
 def queryFilePending(receiver):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = '%s';"
-		n = cursor.execute(sql, (receiver))
+		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = '{}';".format(receiver)
+		n = cursor.execute(sql)
 		result = cursor.fetchall()
-	except:
-		print("DB error in query file")
+	except Exception as e:
+		print("DB error in query file: " + str(e))
 		db.close()
 		return False
 	db.close()	
@@ -36,30 +38,30 @@ def queryFilePending(receiver):
 
 		
 def deleteFilePending(receiver, sender, filename):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM FilePending WHERE SENDER = '%s' AND RECEIVER = '%s' AND FILE_NAME = '%s';"
-		n = cursor.execute(sql, (receiver, sender, filename))
+		sql = "DELETE FROM FilePending WHERE SENDER = '{}' AND RECEIVER = '{}' AND FILE_NAME = '{}';".format(sender, receiver, filename)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in delete file")
+	except Exception as e:
+		print("DB error in delete file: " + str(e))
 		db.rollback()
 		db.close()
 		return False
 	db.close()	
-	return True	
+	return True if n > 0 else False	
 
 
 def insertUser(username, email, number, password, name):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO USER VALUES ('%s', '%s', '%s', '%s', '%s');"
-		n = cursor.execute(sql, (username, email, number, password, name))
+		sql = "INSERT INTO USER VALUES ('{}', '{}', '{}', '{}', '{}');".format(username, email, number, password, name)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in insert user")
+	except Exception as e:
+		print("DB error in insert user: " + str(e))
 		db.rollback()
 		db.close()
 		return False
@@ -67,42 +69,60 @@ def insertUser(username, email, number, password, name):
 	return True	
 
 def queryUser(username):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM User WHERE USERNAME = '%s';"
-		n = cursor.execute(sql, (username))
+		sql = "SELECT * FROM User WHERE USERNAME = '{}';".format(username)
+		n = cursor.execute(sql)
 		result = cursor.fetchall()
-	except:
-		print("DB error in query user")
+	except Exception as e:
+		print("DB error in query user: " + str(e))
 		db.close()
 		return False
 	db.close()	
-	if n == 1 return result else return False
+	return result if n == 1 else False
 
 def verifyUser(username, password):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM User WHERE USERNAME = '%s' AND PASSWORD = '%s';"
-		n = cursor.execute(sql, (username, password))
+		sql = "SELECT * FROM User WHERE USERNAME = '{}' AND PASSWORD = '{}';".format(username, password)
+		n = cursor.execute(sql)
 		result = cursor.fetchall()
-	except:
-		print("DB error in verify user")
+	except Exception as e:
+		print("DB error in verify user: " + str(e))
 		db.close()
 		return False
 	db.close()	
-	if n == 1 return True else return False
+	return True if n == 1 else False
 
-def insertPairing(sender, receiver):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+def deleteUser(username):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO Pairing VALUES ('%s', '%s');"
-		n = cursor.execute(sql, (sender, receiver))
+		#pendingFiles = queryFilePending(username)
+		#for i in pendingFiles:
+		#	deleteFilePending(i[0], username, i[1])
+		sql = "DELETE FROM USER WHERE USERNAME = '{}';".format(username)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in insert pairing")
+	except Exception as e:
+		print("DB error in delete user: " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()	
+	return True if n == 1 else False	
+
+def insertPairing(sender, receiver):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "INSERT INTO Pairing VALUES ('{}', '{}');".format(sender, receiver)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in insert pairing: " + str(e))
 		db.rollback()
 		db.close()
 		return False
@@ -110,31 +130,97 @@ def insertPairing(sender, receiver):
 	return True	
 
 def verifyPairing(sender, receiver):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM Pairing WHERE SENDER = '%s' AND RECEIVER = '%s';"
-		n = cursor.execute(sql, (sender, receiver))
+		sql = "SELECT * FROM Pairing WHERE SENDER = '{}' AND RECEIVER = '{}';".format(sender, receiver)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in verify pairing")
+	except Exception as e:
+		print("DB error in verify pairing: " + str(e))
 		db.close()
 		return False
 	db.close()	
-	if n == 1 return True else return False
+	return True if n == 1 else False
 
 def deletePairing(sender, receiver):
-	db = PyMySQL.connect("localhost", "root", dbPass, "up")
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM Pairing WHERE SENDER = '%s' AND RECEIVER = '%s';"
-		n = cursor.execute(sql, (receiver, sender))
+		sql = "DELETE FROM Pairing WHERE SENDER = '{}' AND RECEIVER = '{}';".format(sender, receiver)
+		n = cursor.execute(sql)
 		db.commit()
-	except:
-		print("DB error in delete pairing")
+	except Exception as e:
+		print("DB error in delete pairing: " + str(e))
 		db.rollback()
 		db.close()
 		return False
 	db.close()	
 	return True	
 
+def printLog():
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "SELECT * FROM FileLog;"
+		n = cursor.execute(sql)
+		result = cursor.fetchall()
+		#for row in result:
+		#	print(row)
+	except Exception as e:
+		print("DB error in query user: " + str(e))
+		db.close()
+		return False
+	db.close()
+	return result if n > 0 else False
+	
+def mainRunner():
+	u1 = "_user1"
+	u2 = "_user2"
+	fn = "_SQLtest.jpg"
+	fh = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	
+	if verifyPairing(u1,u2):
+		print("Pairing existed already, deleting...")
+		if deletePairing(u1,u2):
+			print("Pairing deleted")
+		else:
+			print("Couldn't delete pairing, please check")
+
+	if deleteUser(u1):
+		print("User1 existed already, deleting...")
+
+	if deleteUser(u2):
+		print("User2 existed already, deleting...")
+
+	if insertUser(u1, "a", "a", "a", "a"):
+		print('User 1 added')
+		if insertUser(u2, "b", "b", "b", "b"):
+			print('User 2 added')
+			if insertPairing(u1, u2):
+				print("Pairing created")
+				if verifyPairing(u1,u2):
+					print('Pairing verified')
+					if insertFilePending(u1,u2,fn,fh):
+						print("File added to pending table")
+						print('Now testing downloading')
+						print (queryFilePending(u2))
+						if deleteFilePending(u2,u1,fn):
+							print("File deleted successfully")
+							if deletePairing(u1,u2):
+								print("Pairing deleted")
+								if deleteUser(u1) and deleteUser(u2):
+									print("Users deleted")
+
+	logs = printLog()
+	if logs:
+		print("\nPrinting logs")
+		for row in logs:
+			print(row)
+	else:
+		print("No logs found")
+
+	print('Exiting..')
+
+if __name__ == "__main__":
+	mainRunner()
