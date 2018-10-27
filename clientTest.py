@@ -17,7 +17,7 @@ class ClientTest(unittest.TestCase):
 		upload.setReceiver("B")
 		upload.setFilename("t.jpg")
 		req_text = upload.runner()
-		self.assertEqual(req_text,'"File uploaded"\n')
+		self.assertEqual(req_text[:13],'"File uploaded'[:13])
 
 	def test_neg_a_upload(self):
 		#negative test (upload)

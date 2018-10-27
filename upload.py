@@ -34,12 +34,15 @@ def runner():
 	try:
 		f = open(filename, "rb")
 		filedata = base64.b64encode(f.read())
-	except:
+	except Exception as e:
+		print("Error: " + str(e))
 		return "Invalid"
 	f.close()
 	DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}
 	req = requests.put(url = URL, json = DATA)
-	return req.text
+	requestResult = req.text
+	print(requestResult)
+	return requestResult
 
 if __name__ == "__main__":
 	main()
