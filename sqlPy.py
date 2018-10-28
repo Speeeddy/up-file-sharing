@@ -72,7 +72,7 @@ def queryUser(username):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM User WHERE USERNAME = '{}';".format(username)
+		sql = "SELECT * FROM USER WHERE USERNAME = '{}';".format(username)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -86,7 +86,7 @@ def verifyUser(username, password):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM User WHERE USERNAME = '{}' AND PASSWORD = '{}';".format(username, password)
+		sql = "SELECT * FROM USER WHERE USERNAME = '{}' AND PASSWORD = '{}';".format(username, password)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -156,7 +156,25 @@ def deletePairing(sender, receiver):
 		db.close()
 		return False
 	db.close()	
-	return True	
+	return True
+
+def deleteAllPairing(sender):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "DELETE FROM Pairing WHERE SENDER = '{}';".format(sender)
+		n = cursor.execute(sql)
+		db.commit()
+		sql = "DELETE FROM Pairing WHERE RECEIVER = '{}';".format(sender)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in delete pairing: " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()
+	return True
 
 def printLog():
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')

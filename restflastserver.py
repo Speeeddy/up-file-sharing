@@ -205,13 +205,130 @@ class FileTransfer(Resource):
 				return "File not found", 404
 		except:
 			return "File deletion exception", 404
-					
+
+
+class UserManager(Resource):
+
+	def get(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			username = args["username"]
+			password = args["password"]
+			if verifyUser(username,password):
+				return "Verified"
+			else:
+				return "Invalid credentials",404
+		except:
+			return "User Verification exception", 404
+
+	def post(self):
+		return "Invalid - Use PUT", 404
+
+	def put(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			username = args["username"]
+			email = args["email"]
+			number = args["number"]
+			password = args["password"]
+			name = args["name"]
+			# Checking if username already in use
+			result = queryUser(username)
+			if result == False :
+				insertUser(username, email, number, password, name)
+				return "User Created"
+			else:
+				return "Username already in use",404
+		except:
+			return "User Creation exception", 404
+
+	def delete(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			username = args["username"]
+			if deleteUser(username):
+				# When we delete an account, we remove all pairings associated with it
+				if deleteAllPairing(username):
+					return username + " account and all its associated pairings deleted"
+				else:
+					return username + " account deleted but its associated pairings not deleted"
+			else:
+				return username + " account deletion failed",404
+		except:
+			return "User deletion exception", 404
+
+class PairingManager(Resource):
+
+	def get(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			sender = args["sender"]
+			receiver = args["receiver"]
+			if verifyPairing(sender,receiver):
+				return "Paired"
+			else:
+				return "Not Paired",404
+		except:
+			return "Pairing Verification exception", 404
+
+	def post(self, sender, receiver):
+		return "Invalid - Use PUT", 404
+
+	def put(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			sender = args["sender"]
+			receiver = args["receiver"]
+			# Assuming that we don't have to ask receiver for permission when sender
+			# sends pairing request
+
+			# Checking if sender and receiver accounts are active(not been deleted)
+			if queryUser(sender) == False:
+				return "Pairing Error : "+sender+" has been deleted",404
+			if queryUser(receiver) == False:
+				return "Pairing Error : "+receiver+" has been deleted",404
+
+			#Checking if pairing already exists
+			if verifyPairing(sender,receiver):
+				return "Pairing already exists"
+
+			# Initiate Pairing
+			if insertPairing(sender,receiver) and insertPairing(receiver,sender):
+				return "Pairing Completed"
+		except:
+			return "Pairing creation exception", 404
+
+	def delete(self):
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			sender = args["sender"]
+			receiver = args["receiver"]
+			if deletePairing(sender,receiver) and deletePairing(receiver,sender):
+				return "Pairing removed"
+			else:
+				return "Error in pairing removal",404
+		except:
+			return "Pairing Removal exception", 404
+
 @app.route('/')
 def index():
-	return "Hello world! S3 and DB have been integrated!\n\rBrogrammers send their regards."
+	return "Hello world! S3 and DB have been integrated !\nRegistration and Pairing Functionality has been added\n\rBrogrammers send their regards."
 
 api.add_resource(FileTransfer, "/ft", '/ft/<string:name>/<string:sender>/<string:filename>')
 api.add_resource(FilePending, "/fp", "/fp/<string:name>")
-
+api.add_resource(UserManager, "/um", "/um/<string:username>/<string:email>/<string:number>/<string:password>/<string:name>")
+api.add_resource(PairingManager, "/pm", "/pm/<string:sender>/<string:receiver>")
 if __name__ == "__main__": 
 	app.run(debug=True)
