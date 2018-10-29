@@ -59,6 +59,11 @@ class testMethods(unittest.TestCase):
 		URL = "http://nipunsood.ooo/um"
 		DATA = { "username" : username , "email" : email, "number" : number, "password":password, "name":name }
 		DATA2 = { "username" : username2 , "email" : email2, "number" : number2, "password":password2, "name":name2 }
+		DATA3 = {"username" : "Speeeddy" ,"password" : "123456"}
+
+		# Login check
+		req = requests.get(url = URL, json = DATA3)
+		print(req.text)
 
 		# Create User 1
 		req = requests.put(url = URL, json = DATA)

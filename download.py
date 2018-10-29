@@ -18,7 +18,7 @@ def main():
 	runner()  	
 def runner():
 	global receiver
-	URLpending = "http://nipunsood.ooo/fp/"+receiver
+	URLpending = "http://up-karoon.ga/api/fp/"+receiver
 
 	reqGetPending = requests.get(url = URLpending)
 
@@ -32,7 +32,7 @@ def runner():
 		print("Download which file? Enter index")
 		index = int(input().strip())-1
 
-		URLfile = "http://nipunsood.ooo/ft/" + receiver + "/" + data[index][0] + "/" + data[index][1]
+		URLfile = "http://up-karoon.ga/api/fp/" + receiver + "/" + data[index][0] + "/" + data[index][1]
 		reqGetFile = requests.get(url = URLfile)
 		fileData = base64.b64decode(reqGetFile.text)
 		f = open("rec_"+data[index][1], "wb")

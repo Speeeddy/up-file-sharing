@@ -210,41 +210,51 @@ class FileTransfer(Resource):
 class UserManager(Resource):
 
 	def get(self):
-		try:
-			args = request.get_json(force=True)
-			if args == None:
-				raise "JsonError"
-			username = args["username"]
-			password = args["password"]
-			if verifyUser(username,password):
-				return "Verified"
-			else:
-				return "Invalid credentials",404
-		except:
-			return "User Verification exception", 404
+		return "Try post", 400
 
-	def post(self):
-		return "Invalid - Use PUT", 404
+	def post(self, type):
+		if type == "login":	
+			try:
+				args = request.get_json(force=True)
+				#print("Args are: " + str(args))
+				if args == None:
+					raise "JsonError"
+				username = args["username"]
+				password = args["password"]
+				#return str(args), 200
+				if verifyUser(username,password):
+					return "Verified"
+				else:
+					return "Invalid credentials",404
+			except:
+				return "User Verification exception", 404
+
+		elif type == "register":
+			try:
+				args = request.get_json(force=True)
+				if args == None:
+					raise "JsonError"
+				username = args["username"]
+				email = args["email"]
+
+				number = args["number"]
+				password = args["password"]
+				name = args["name"]
+				# Checking if username already in use
+				result = queryUser(username)
+				if result == False :
+					insertUser(username, email, number, password, name)
+					return "User Created"
+				else:
+					return "Username already in use",404
+			except:
+				return "User Creation exception", 404
+
+		else:
+			return "Use login/register after um", 400
 
 	def put(self):
-		try:
-			args = request.get_json(force=True)
-			if args == None:
-				raise "JsonError"
-			username = args["username"]
-			email = args["email"]
-			number = args["number"]
-			password = args["password"]
-			name = args["name"]
-			# Checking if username already in use
-			result = queryUser(username)
-			if result == False :
-				insertUser(username, email, number, password, name)
-				return "User Created"
-			else:
-				return "Username already in use",404
-		except:
-			return "User Creation exception", 404
+		return "Use POST", 400
 
 	def delete(self):
 		try:
@@ -265,13 +275,13 @@ class UserManager(Resource):
 
 class PairingManager(Resource):
 
-	def get(self):
+	def get(self, sender, receiver):
 		try:
-			args = request.get_json(force=True)
-			if args == None:
-				raise "JsonError"
-			sender = args["sender"]
-			receiver = args["receiver"]
+			#args = request.get_json(force=True)
+			#if args == None:
+			#	raise "JsonError"
+			#sender = args["sender"]
+			#receiver = args["receiver"]
 			if verifyPairing(sender,receiver):
 				return "Paired"
 			else:
@@ -279,10 +289,7 @@ class PairingManager(Resource):
 		except:
 			return "Pairing Verification exception", 404
 
-	def post(self, sender, receiver):
-		return "Invalid - Use PUT", 404
-
-	def put(self):
+	def post(self):
 		try:
 			args = request.get_json(force=True)
 			if args == None:
@@ -308,6 +315,9 @@ class PairingManager(Resource):
 		except:
 			return "Pairing creation exception", 404
 
+	def put(self):
+		return "Invalid - Use POST", 404
+
 	def delete(self):
 		try:
 			args = request.get_json(force=True)
@@ -322,13 +332,13 @@ class PairingManager(Resource):
 		except:
 			return "Pairing Removal exception", 404
 
-@app.route('/')
+@app.route('/api/')
 def index():
-	return "Hello world! S3 and DB have been integrated !\nRegistration and Pairing Functionality has been added\n\rBrogrammers send their regards."
+	return "Hello world! S3 and DB have been integrated !\nRegistration and Pairing Functionality has been added\n\rBrogrammers send their regards. :)	"
 
-api.add_resource(FileTransfer, "/ft", '/ft/<string:name>/<string:sender>/<string:filename>')
-api.add_resource(FilePending, "/fp", "/fp/<string:name>")
-api.add_resource(UserManager, "/um", "/um/<string:username>/<string:email>/<string:number>/<string:password>/<string:name>")
-api.add_resource(PairingManager, "/pm", "/pm/<string:sender>/<string:receiver>")
+api.add_resource(FileTransfer, "/api/ft", '/api/ft/<string:name>/<string:sender>/<string:filename>')
+api.add_resource(FilePending, "/api/fp", "/api/fp/<string:name>")
+api.add_resource(UserManager, "/api/um", "/api/um/<string:type>")#/<string:email>/<string:number>/<string:password>/<string:name>")
+api.add_resource(PairingManager, "/api/pm", "/api/pm/<string:sender>/<string:receiver>")
 if __name__ == "__main__": 
 	app.run(debug=True)
