@@ -26,7 +26,7 @@ def queryFilePending(receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = '{}';".format(receiver)
+		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = BINARY '{}';".format(receiver)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -41,7 +41,7 @@ def deleteFilePending(receiver, sender, filename):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM FilePending WHERE SENDER = '{}' AND RECEIVER = '{}' AND FILE_NAME = '{}';".format(sender, receiver, filename)
+		sql = "DELETE FROM FilePending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}' AND FILE_NAME = BINARY '{}';".format(sender, receiver, filename)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -72,7 +72,7 @@ def queryUser(username):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM USER WHERE USERNAME = '{}';".format(username)
+		sql = "SELECT * FROM USER WHERE USERNAME = BINARY '{}';".format(username)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -80,13 +80,13 @@ def queryUser(username):
 		db.close()
 		return False
 	db.close()	
-	return result if n == 1 else False
+	return n
 
 def verifyUser(username, password):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM USER WHERE USERNAME = '{}' AND PASSWORD = '{}';".format(username, password)
+		sql = "SELECT * FROM USER WHERE USERNAME = BINARY '{}' AND PASSWORD = BINARY '{}';".format(username, password)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -103,7 +103,7 @@ def deleteUser(username):
 		#pendingFiles = queryFilePending(username)
 		#for i in pendingFiles:
 		#	deleteFilePending(i[0], username, i[1])
-		sql = "DELETE FROM USER WHERE USERNAME = '{}';".format(username)
+		sql = "DELETE FROM USER WHERE USERNAME = BINARY '{}';".format(username)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -133,7 +133,7 @@ def verifyPairing(sender, receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT * FROM Pairing WHERE SENDER = '{}' AND RECEIVER = '{}';".format(sender, receiver)
+		sql = "SELECT * FROM Pairing WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -147,7 +147,7 @@ def deletePairing(sender, receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM Pairing WHERE SENDER = '{}' AND RECEIVER = '{}';".format(sender, receiver)
+		sql = "DELETE FROM Pairing WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -162,10 +162,10 @@ def deleteAllPairing(sender):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM Pairing WHERE SENDER = '{}';".format(sender)
+		sql = "DELETE FROM Pairing WHERE SENDER = BINARY '{}';".format(sender)
 		n = cursor.execute(sql)
 		db.commit()
-		sql = "DELETE FROM Pairing WHERE RECEIVER = '{}';".format(sender)
+		sql = "DELETE FROM Pairing WHERE RECEIVER = BINARY '{}';".format(sender)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:

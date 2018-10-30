@@ -169,8 +169,9 @@ class FileTransfer(Resource):
 			output = upload_file_to_s3(filename,S3_BUCKET)
 	#		print(7)
 			
-			putEntryIntoPendingTable(receiver, name, filename)
+			if not putEntryIntoPendingTable(receiver, name, filename):
 	#		print(8)
+				return "DB prob, maybe file name issue?", 400
 						
 			os.remove("UserFiles/"+filename)
 			return "File uploaded at "+output, 200
@@ -232,6 +233,7 @@ class UserManager(Resource):
 		elif type == "register":
 			try:
 				args = request.get_json(force=True)
+				print(args)
 				if args == None:
 					raise "JsonError"
 				username = args["username"]
@@ -242,13 +244,16 @@ class UserManager(Resource):
 				name = args["name"]
 				# Checking if username already in use
 				result = queryUser(username)
-				if result == False :
+				print("result is " + str(result))
+				if result is 0 :
 					insertUser(username, email, number, password, name)
-					return "User Created"
+					return "User Created", 200
 				else:
+					print("Should return already in use")
 					return "Username already in use",404
-			except:
-				return "User Creation exception", 404
+			except Exception as e:
+				print(str(e))				
+				return "User Creation exception", 400
 
 		else:
 			return "Use login/register after um", 400
