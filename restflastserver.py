@@ -125,6 +125,16 @@ class FileTransfer(Resource):
 		#get the file. name = file name
 		#implement check against impersonation
 
+		# Sometimes filename may be erronous, when a question mark occurs in the file, or a special character
+		# which the encoding couldn't process
+		try:
+			print(request.url)
+			filename2 = request.url.split('/')[-1]
+			if filename != filename2:
+				print("Filename encoding issue, fixing " + filename + " to " + filename2)
+				filename = filename2
+		except Exception as e:
+			print("Prob - " + str(e))
 		pendingList = getEntryFromPendingTable(name)
 		
 		if pendingList and (sender, filename) in pendingList:
