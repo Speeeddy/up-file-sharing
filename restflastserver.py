@@ -27,7 +27,7 @@ def getEntryFromPendingTable(username):
 		return result
 	else:
 		DBresult = queryFilePending(username)
-		result = list((i[0], i[1]) for i in DBresult)
+		result = list((i[0], i[1], i[3]) for i in DBresult)
 		return result
 
 def putEntryIntoPendingTable(receiver, sender, filename, filehash="N/A"):
@@ -265,8 +265,21 @@ class UserManager(Resource):
 				print(str(e))				
 				return "User Creation exception", 400
 
+		elif type == "check":
+			try:
+				args = request.get_json(force=True)
+				if args == None:
+					raise "JsonError"
+				username = args["username"]
+				if queryUser(username):
+					return "User exists"
+				else:
+					return "Invalid username",404
+			except:
+				return "User Exists Verification exception", 404
+
 		else:
-			return "Use login/register after um", 400
+			return "Use login/register/check after um", 400
 
 	def put(self):
 		return "Use POST", 400

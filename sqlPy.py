@@ -80,7 +80,7 @@ def queryUser(username):
 		db.close()
 		return False
 	db.close()	
-	return n
+	return True if n == 1 else False
 
 def verifyUser(username, password):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
