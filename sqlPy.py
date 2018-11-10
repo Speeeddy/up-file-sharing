@@ -26,7 +26,7 @@ def queryFilePending(receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = BINARY '{}';".format(receiver)
+		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = BINARY '{}' ORDER BY TIME_UPLOADED DESC;".format(receiver)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:

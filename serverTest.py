@@ -31,9 +31,9 @@ class testMethods(unittest.TestCase):
 		# print(req.text)
 		
 		# #Get Pending
-		# URL = "https://up-karoon.ga/api/fp/yasifx"
-		# req = requests.get(url = URL)
-		# print(req.text)
+		URL = "https://up-karoon.ga/api/fp/sidshas"
+		req = requests.get(url = URL)
+		print(req.text)
 
 		# #Download
 		# URL = "https://up-karoon.ga/api/ft/yasifx/sid/"+filename
