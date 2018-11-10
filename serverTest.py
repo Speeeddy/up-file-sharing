@@ -35,17 +35,21 @@ class testMethods(unittest.TestCase):
 		req = requests.get(url = URL)
 		print(req.text)
 
+		URL = "https://up-karoon.ga/api/um"
+		req = requests.get(url = URL, json = { "username" : "sidshas" } )
+		print(req.text)
+
 		# # #Download
 		# filename = "giphy.gif"
 		# URL = "https://up-karoon.ga/api/ft/sidshas/sidshas/"+filename
 		# req = requests.delete(url = URL)
 		# print(req.text)
 
-		sender = "sidshas"
-		URL = "https://up-karoon.ga/api/ft"
-		DATA = {"name":sender, "sender":sender, "filename": "giphy.gif"}
-		req = requests.delete(url = URL, json = DATA )
-		print(req.text)
+		# sender = "sidshas"
+		# URL = "https://up-karoon.ga/api/ft"
+		# DATA = {"name":sender, "sender":sender, "filename": "giphy.gif"}
+		# req = requests.delete(url = URL, json = DATA )
+		# print(req.text)
 
 ######################################################
 

@@ -213,7 +213,17 @@ class FileTransfer(Resource):
 class UserManager(Resource):
 
 	def get(self):
-		return "Try post", 400
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			username = args["username"]
+			if queryUser(username):
+				return jsonify( getUserHistory(username) ) 
+			else:
+				return "Invalid username",404
+		except:
+			return "User History Retrieval exception",404
 
 	def post(self, type):
 		if type == "login":	

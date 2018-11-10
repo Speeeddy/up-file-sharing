@@ -176,6 +176,20 @@ def deleteAllPairing(sender):
 	db.close()
 	return True
 
+def getUserHistory(username):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "SELECT SENDER, RECEIVER, FILENAME, TIME, ACTION FROM FileLog WHERE SENDER = BINARY '{}' OR RECEIVER = BINARY '{}' ;".format(username, username)
+		n = cursor.execute(sql)
+		result = cursor.fetchall()
+	except Exception as e:
+		print("DB error in querying user history: " + str(e))
+		db.close()
+		return False
+	db.close()
+	return result if n > 0 else False
+
 def printLog():
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
