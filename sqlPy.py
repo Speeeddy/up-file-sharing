@@ -41,16 +41,16 @@ def deleteFilePending(receiver, sender, filename):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM FilePending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}' AND FILE_NAME = BINARY '{}';".format(sender, receiver, filename)
+		sql = "DELETE FROM FilePending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}' AND FILE_NAME = BINARY '{}' ;".format(sender, receiver, filename)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
 		print("DB error in delete file: " + str(e))
 		db.rollback()
 		db.close()
-		return False
+		return "DB error in delete file: "
 	db.close()	
-	return True if n > 0 else False	
+	return True if n>0 else False	
 
 
 def insertUser(username, email, number, password, name):

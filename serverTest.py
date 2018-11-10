@@ -18,31 +18,34 @@ class testMethods(unittest.TestCase):
 
 		#positive test
 		# sender = "sidshas"
-		# receiver = "yasifx"
-		# filename = "temp.txt"
+		# # receiver = "yasifx"
+		# filename = "giphy.gif"
 
-		# #Upload
-		# f = open(filename,"rb")
+		# # #Upload
+		# # f = open(filename,"rb")
 		# URL = "https://up-karoon.ga/api/ft"
-		# filedata = base64.b64encode(f.read())
-		# f.close()
-		# DATA = {"name":sender, "sendto":receiver, "filename":filename, "data":filedata}	
-		# req = requests.put(url = URL, json = DATA)
-		# print(req.text)
+		# # filedata = base64.b64encode(f.read())
+		# # f.close()
+		# DATA = {"name":sender, "sendto":sender, "filename":filename, "data":filedata}	
+		# # req = requests.put(url = URL, json = DATA)
+		# # print(req.text)
 		
-		# #Get Pending
+		# # #Get Pending
 		URL = "https://up-karoon.ga/api/fp/sidshas"
 		req = requests.get(url = URL)
 		print(req.text)
 
-		# #Download
-		# URL = "https://up-karoon.ga/api/ft/yasifx/sid/"+filename
-		# req = requests.get(url = URL)
+		# # #Download
+		# filename = "giphy.gif"
+		# URL = "https://up-karoon.ga/api/ft/sidshas/sidshas/"+filename
+		# req = requests.delete(url = URL)
 		# print(req.text)
 
-		# URL = "https://up-karoon.ga/api/um/check"
-		# req = requests.post(url = URL, json = { "username" : "sidshas"} )
-		# print(req.text)
+		sender = "sidshas"
+		URL = "https://up-karoon.ga/api/ft"
+		DATA = {"name":sender, "sender":sender, "filename": "giphy.gif"}
+		req = requests.delete(url = URL, json = DATA )
+		print(req.text)
 
 ######################################################
 
@@ -63,16 +66,16 @@ class testMethods(unittest.TestCase):
 		# URL = "https://up-karoon.ga/api/um"
 		# DATA = { "username" : username , "email" : email, "number" : number, "password":password, "name":name }
 		# DATA2 = { "username" : username2 , "email" : email2, "number" : number2, "password":password2, "name":name2 }
-		# DATA3 = {"username" : "Speeeddy" ,"password" : "123456"}
+		# # DATA3 = {"username" : "Speeeddy" ,"password" : "123456"}
 
-		# #User Check
-		# req = requests.post(url = URL+"/check", json = DATA3)
+		# # #User Check
+		# req = requests.post(url = URL+"/check", json = DATA)
 		# print(req.text)
-		# # Login check
-		# req = requests.post(url = URL+"/login", json = DATA3)
+		# # # Login check
+		# req = requests.post(url = URL+"/login", json = DATA)
 		# print(req.text)
 
-		# # Create User 1
+		# # # Create User 1
 		# req = requests.post(url = URL+"/register", json = DATA)
 		# print(req.text)
 
@@ -102,7 +105,7 @@ class testMethods(unittest.TestCase):
 		# req = requests.get(url = url_pairing+"/"+username+"/"+username2, json = data_pairing)
 		# print(req.text)	
 
-		# #delete User 1
+		#delete User 1
 		# req = requests.delete(url = URL, json = DATA)
 		# print(req.text)
 

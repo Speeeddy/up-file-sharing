@@ -141,7 +141,6 @@ class FileTransfer(Resource):
 			download_file_from_s3(filename, S3_BUCKET)
 			with open("UserFiles/"+"s3_"+filename, "r") as f:
 				dataB64 = f.read()
-
 			os.remove("UserFiles/"+"s3_"+filename)
 			return dataB64, 200
 		else:
@@ -202,15 +201,8 @@ class FileTransfer(Resource):
 			name = args["name"]
 			sender = args["sender"]
 			filename = args["filename"]
-			
 			pendingList = getEntryFromPendingTable(name)
-			
-			if pendingList and (sender, filename) in pendingList:
-				#os.remove("UserFiles/"+filename)
-				#pendingFileTable[name].remove((sender, filename))
-				# Add S3 file removal support here
-				delete_file_from_s3(filename, S3_BUCKET)
-				removeEntryFromPendingTable(name, sender, filename)				
+			if pendingList and removeEntryFromPendingTable(name, sender, filename):			
 				return "File deleted", 200
 			else:
 				return "File not found", 404
@@ -255,7 +247,7 @@ class UserManager(Resource):
 				# Checking if username already in use
 				result = queryUser(username)
 				print("result is " + str(result))
-				if result is 0 :
+				if result is False :
 					insertUser(username, email, number, password, name)
 					return "User Created", 200
 				else:
