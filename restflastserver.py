@@ -18,7 +18,7 @@ pendingFileTable = {}
 #format- {receiver : [(sender, filename)]}
 #list of tuples - so that if we have multiple files for single receiver
 
-def getEntryFromPendingTable(username):
+def getEntryFromPendingTable(username, type=0):
 	#print(16)
 	global pendingFileTable
 	if USE_MYSQL_DB == 0:
@@ -27,7 +27,10 @@ def getEntryFromPendingTable(username):
 		return result
 	else:
 		DBresult = queryFilePending(username)
-		result = list((i[0], i[1], i[3]) for i in DBresult)
+		if type == 0:
+			result = list((i[0], i[1]) for i in DBresult)
+		elif type == 1:				# with timestamp
+			result = list((i[0], i[1], i[3]) for i in DBresult)
 		return result
 
 def putEntryIntoPendingTable(receiver, sender, filename, filehash="N/A"):
@@ -98,7 +101,7 @@ class FilePending(Resource):
 	#@app.route('/fp/<string:name>', methods=['GET'])
 	def get(self, name):
 		
-		pendingList = getEntryFromPendingTable(name)
+		pendingList = getEntryFromPendingTable(name, 1)
 		#implement a check here against impersonation
 		if pendingList:
 			return jsonify(pendingList)
