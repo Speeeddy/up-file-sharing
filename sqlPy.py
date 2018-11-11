@@ -180,7 +180,7 @@ def getUserHistory(username):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT SENDER, RECEIVER, FILENAME, TIME, ACTION FROM FileLog WHERE SENDER = BINARY '{}' OR RECEIVER = BINARY '{}' ;".format(username, username)
+		sql = "SELECT SENDER, RECEIVER, FILENAME, TIME, ACTION FROM FileLog WHERE SENDER = BINARY '{}' OR RECEIVER = BINARY '{}' ORDER BY TIME DESC ;".format(username, username)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
