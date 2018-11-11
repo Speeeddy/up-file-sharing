@@ -19,11 +19,9 @@ pendingFileTable = {}
 #list of tuples - so that if we have multiple files for single receiver
 
 def getEntryFromPendingTable(username, type=0):
-	#print(16)
 	global pendingFileTable
 	if USE_MYSQL_DB == 0:
 		result = pendingFileTable.get(username)
-	#	print(17)
 		return result
 	else:
 		DBresult = queryFilePending(username)
@@ -37,15 +35,10 @@ def putEntryIntoPendingTable(receiver, sender, filename, filehash="N/A"):
 	#print(10)
 	global pendingFileTable
 	if USE_MYSQL_DB == 0:
-	#	print(11)
 		if getEntryFromPendingTable(receiver):
-	#		print(12)
 			pendingFileTable[receiver].append((sender, filename))
-	#		print(13)
 		else:
-	#		print(14)
 			pendingFileTable[receiver] = [(sender, filename)]
-	#		print(15)
 		return True
 	else:
 		return insertFilePending(sender, receiver, filename, filehash)
@@ -152,13 +145,10 @@ class FileTransfer(Resource):
 	#@app.route('/ft', methods=['POST'])
 	def post(self):
 		# not in use, use PUT
-		# Authenticate
 		return "Use PUT", 404
 		
 	#@app.route('/ft', methods=['PUT'])
-	def put(self):
-		# Authenticate
-	
+	def put(self):	
 		try:
 			args = request.get_json(force=True)
 			if args == None:
@@ -195,7 +185,6 @@ class FileTransfer(Resource):
 	#@app.route('/ft', methods=['DELETE'])
 	def delete(self):
 		#send an explicit delete request when file received
-		# Authenticate
 		try:
 			args = request.get_json(force=True)
 			if args == None:
@@ -216,28 +205,16 @@ class FileTransfer(Resource):
 class UserManager(Resource):
 
 	def get(self):
-		try:
-			args = request.get_json(force=True)
-			if args == None:
-				raise "JsonError"
-			username = args["username"]
-			if queryUser(username):
-				return jsonify( getUserHistory(username) ) 
-			else:
-				return "Invalid username",404
-		except:
-			return "User History Retrieval exception",404
+		return "Use PUT/POST", 400
 
 	def post(self, type):
 		if type == "login":	
 			try:
 				args = request.get_json(force=True)
-				#print("Args are: " + str(args))
 				if args == None:
 					raise "JsonError"
 				username = args["username"]
 				password = args["password"]
-				#return str(args), 200
 				if verifyUser(username,password):
 					return "Verified"
 				else:
@@ -287,7 +264,18 @@ class UserManager(Resource):
 			return "Use login/register/check after um", 400
 
 	def put(self):
-		return "Use POST", 400
+		try:
+			args = request.get_json(force=True)
+			if args == None:
+				raise "JsonError"
+			username = args["username"]
+			if queryUser(username):
+				return jsonify( getUserHistory(username) ) 
+			else:
+				return "Invalid username",404
+		except:
+			return "User History Retrieval exception",404
+		
 
 	def delete(self):
 		try:
@@ -310,11 +298,6 @@ class PairingManager(Resource):
 
 	def get(self, sender, receiver):
 		try:
-			#args = request.get_json(force=True)
-			#if args == None:
-			#	raise "JsonError"
-			#sender = args["sender"]
-			#receiver = args["receiver"]
 			if verifyPairing(sender,receiver):
 				return "Paired"
 			else:

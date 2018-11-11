@@ -36,7 +36,7 @@ class testMethods(unittest.TestCase):
 		print(req.text)
 
 		URL = "https://up-karoon.ga/api/um"
-		req = requests.get(url = URL, json = { "username" : "sidshas" } )
+		req = requests.put(url = URL, json = { "username" : "sidshas" } )
 		print(req.text)
 
 		# # #Download
