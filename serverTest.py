@@ -21,23 +21,26 @@ class testMethods(unittest.TestCase):
 		# # receiver = "yasifx"
 		# filename = "giphy.gif"
 
-		# # #Upload
-		# # f = open(filename,"rb")
-		# URL = "https://up-karoon.ga/api/ft"
-		# # filedata = base64.b64encode(f.read())
-		# # f.close()
-		# DATA = {"name":sender, "sendto":sender, "filename":filename, "data":filedata}	
-		# # req = requests.put(url = URL, json = DATA)
-		# # print(req.text)
-		
-		# # #Get Pending
-		URL = "https://up-karoon.ga/api/fp/sidshas"
-		req = requests.get(url = URL)
+		URL = "https://up-karoon.ga/api/um/check"
+		req = requests.post(url = URL, json = { "username" : " ultra ,sidshas , yasifx,akash,kakka" } )
 		print(req.text)
 
-		URL = "https://up-karoon.ga/api/um"
-		req = requests.put(url = URL, json = { "username" : "sidshas" } )
+		# #Upload
+		filename = "heheehe.jpg"
+		f = open(filename,"rb")
+		URL = "https://up-karoon.ga/api/ft"
+		filedata = base64.b64encode(f.read())
+		f.close()
+		DATA = {"name":"sidshas", "sendto":"ultra,akash,nipun", "filename":filename, "data":filedata}	
+		req = requests.put(url = URL, json = DATA)
 		print(req.text)
+		
+		# # #Get Pending
+		# URL = "https://up-karoon.ga/api/fp/sidshas"
+		# req = requests.get(url = URL)
+		# print(req.text)
+
+		
 
 		# # #Download
 		# filename = "giphy.gif"

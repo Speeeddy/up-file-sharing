@@ -154,32 +154,27 @@ class FileTransfer(Resource):
 			if args == None:
 				raise "JsonError"
 
-	#		print(1)
 			name = args["name"]
-	#		print(2)
 			receiver = args["sendto"]
-	#		print(3)
+			receivers = list(set(receiver.split(",")))
 			filename = args["filename"]
-	#		print(4)
 			dataEncoded = args["data"]
-	#		print(5)
 			#not decoding b64 in server, do it in clientside
 			with open("UserFiles/"+filename, "w") as g:
 				g.write(dataEncoded)
 				g.close()
-	#		print(6)
 			output = upload_file_to_s3(filename,S3_BUCKET)
-	#		print(7)
 			
-			if not putEntryIntoPendingTable(receiver, name, filename):
-	#		print(8)
-				return "DB prob, maybe file name issue?", 400
+			for receiver in receivers:
+				receiver = receiver.strip()
+				if not putEntryIntoPendingTable(receiver, name, filename):
+					return "DB prob, maybe file name issue?", 400
 						
 			os.remove("UserFiles/"+filename)
 			return "File uploaded at "+output, 200
 
 		except Exception as e:
-			print("HEREEE " + str(e))			
+			print("File transfer request Exception" + str(e))			
 			return e, 404
 
 	#@app.route('/ft', methods=['DELETE'])
@@ -252,13 +247,19 @@ class UserManager(Resource):
 				args = request.get_json(force=True)
 				if args == None:
 					raise "JsonError"
-				username = args["username"]
-				if queryUser(username):
-					return "User exists"
+				usernames = list(set(args["username"].split(',')))
+				invalid_users = ""
+				for username in usernames:
+					username=username.strip()
+					if not queryUser(username):
+						invalid_users+=username+" , "
+				if len(invalid_users) == 0:
+					return "All users valid",200 
 				else:
-					return "Invalid username",404
+					# To remove last comma from string
+					return invalid_users[:-3],404
 			except:
-				return "User Exists Verification exception", 404
+				return "Users Exist Verification exception", 404
 
 		else:
 			return "Use login/register/check after um", 400
