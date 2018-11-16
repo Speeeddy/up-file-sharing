@@ -27,11 +27,11 @@ def getEntryFromPendingTable(username, type=0):
 		DBresult = queryFilePending(username)
 		if type == 0:
 			result = list((i[0], i[1]) for i in DBresult)
-		elif type == 1:				# with timestamp
-			result = list((i[0], i[1], i[3]) for i in DBresult)
+		elif type == 1:				# with timestamp and filesize
+			result = list((i[0], i[1], i[3], i[4]) for i in DBresult)
 		return result
 
-def putEntryIntoPendingTable(receiver, sender, filename, filehash="N/A"):
+def putEntryIntoPendingTable(receiver, sender, filename, filesize="N/A", filehash="N/A"):
 	#print(10)
 	global pendingFileTable
 	if USE_MYSQL_DB == 0:
@@ -41,7 +41,7 @@ def putEntryIntoPendingTable(receiver, sender, filename, filehash="N/A"):
 			pendingFileTable[receiver] = [(sender, filename)]
 		return True
 	else:
-		return insertFilePending(sender, receiver, filename, filehash)
+		return insertFilePending(sender, receiver, filename, filehash, filesize)
 		
 def removeEntryFromPendingTable(receiver, sender, filename):
 	global pendingFileTable
@@ -159,6 +159,10 @@ class FileTransfer(Resource):
 			receivers = list(set(receiver.split(",")))
 			filename = args["filename"]
 			dataEncoded = args["data"]
+			filesize = args.get("filesize")
+			if not filesize:
+				filesize = int(len(dataEncoded) * 0.75)	#approx	
+			print("Filesize is " + str(filesize))	
 			#not decoding b64 in server, do it in clientside
 			with open("UserFiles/"+filename, "w") as g:
 				g.write(dataEncoded)
@@ -167,7 +171,7 @@ class FileTransfer(Resource):
 			
 			for receiver in receivers:
 				receiver = receiver.strip()
-				if not putEntryIntoPendingTable(receiver, name, filename):
+				if not putEntryIntoPendingTable(receiver, name, filename, filesize):
 					return "DB prob, maybe file name issue?", 400
 						
 			os.remove("UserFiles/"+filename)
@@ -247,19 +251,22 @@ class UserManager(Resource):
 				args = request.get_json(force=True)
 				if args == None:
 					raise "JsonError"
+				print(args)
 				usernames = list(set(args["username"].split(',')))
 				invalid_users = ""
 				for username in usernames:
 					username=username.strip()
 					if not queryUser(username):
 						invalid_users+=username+" , "
+					else:
+						print(username+" verified")
 				if len(invalid_users) == 0:
-					return "All users valid",200 
+					return "User exists",200 
 				else:
 					# To remove last comma from string
-					return invalid_users[:-3],404
+					return "Invalid usernames: " + invalid_users[:-3],404
 			except:
-				return "Users Exist Verification exception", 404
+				return "User Exists Verification exception", 404
 
 		else:
 			return "Use login/register/check after um", 400

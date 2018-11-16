@@ -6,11 +6,11 @@ dbPassFile = open("DBPass.txt", "r")
 dbPass = dbPassFile.read().strip()
 print("Password is '" + dbPass + "'")
 
-def insertFilePending(sender, receiver, filename, filehash):
+def insertFilePending(sender, receiver, filename, filehash, filesize):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO FilePending (SENDER, RECEIVER, FILE_NAME, FILE_HASH) VALUES ('{}','{}','{}','{}');".format(sender, receiver, filename, filehash)
+		sql = "INSERT INTO FilePending (SENDER, RECEIVER, FILE_NAME, FILE_HASH, FILESIZE) VALUES ('{}','{}','{}','{}','{}');".format(sender, receiver, filename, filehash, filesize)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -26,7 +26,7 @@ def queryFilePending(receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED FROM FilePending WHERE RECEIVER = BINARY '{}' ORDER BY TIME_UPLOADED DESC;".format(receiver)
+		sql = "SELECT SENDER, FILE_NAME, FILE_HASH, TIME_UPLOADED, FILESIZE FROM FilePending WHERE RECEIVER = BINARY '{}' ORDER BY TIME_UPLOADED DESC;".format(receiver)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
