@@ -227,14 +227,14 @@ def outgoingPairRequest(receiver):
 		cursor = db.cursor()
 		sql = "Select SENDER FROM PairPending WHERE RECEIVER = BINARY '{}';".format(receiver)
 		n = cursor.execute(sql)
-		db.commit()
+		result = cursor.fetchall()
 	except Exception as e:
 		print("DB error in Outgoing Pair Request : " + str(e))
 		db.rollback()
 		db.close()
 		return False
 	db.close()	
-	return True
+	return result if n > 0 else False
 
 def deletePairRequest(sender,receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
