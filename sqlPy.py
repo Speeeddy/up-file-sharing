@@ -206,6 +206,66 @@ def printLog():
 	db.close()
 	return result if n > 0 else False
 	
+def incomingPairRequest(sender,receiver):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "INSERT INTO PairPending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in Incoming Pair Request : " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()	
+	return True
+
+def outgoingPairRequest(receiver):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "Select SENDER FROM PairPending WHERE RECEIVER = BINARY '{}';".format(receiver)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in Outgoing Pair Request : " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()	
+	return True
+
+def deletePairRequest(sender,receiver):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "DELETE FROM PairPending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in Deleting Pair Request : " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()	
+	return True
+	
+def insertPairRequest(sender,receiver):
+	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
+	try:
+		cursor = db.cursor()
+		sql = "INSERT INTO Pairing WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		n = cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		print("DB error in Inserting Pairing : " + str(e))
+		db.rollback()
+		db.close()
+		return False
+	db.close()	
+	return True
+
 def mainRunner():
 	u1 = "_user1"
 	u2 = "_user2"
