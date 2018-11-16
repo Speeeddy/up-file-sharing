@@ -210,7 +210,7 @@ def incomingPairRequest(sender,receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO PairPending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		sql = "INSERT INTO PairPending VALUES ('{}', '{}');".format(sender, receiver)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -255,7 +255,7 @@ def insertPairRequest(sender,receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "INSERT INTO Pairing WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		sql = "INSERT INTO Pairing VALUES ('{}', '{}');".format(sender, receiver)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:
