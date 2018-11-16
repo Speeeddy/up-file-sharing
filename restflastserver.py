@@ -304,43 +304,89 @@ class UserManager(Resource):
 
 class PairingManager(Resource):
 
-	def get(self, sender, receiver):
-		try:
-			if verifyPairing(sender,receiver):
-				return "Paired"
-			else:
-				return "Not Paired",404
-		except:
-			return "Pairing Verification exception", 404
+	def get(self):
+		return "Use POST/PUT",404
 
-	def post(self):
+	def post(self,type):
+		if type == "startPairing":
+			try:
+				args = request.get_json(force=True)
+				if args == None:
+					raise "JsonError"
+				sender = args["sender"]
+				receiver = args["receiver"]
+				# Assuming that we don't have to ask sender for permission when receiver
+				# sends pairing request
+				# Checking if sender and receiver accounts are active(not been deleted)
+				if queryUser(sender) == False:
+					return "Pairing Error : "+sender+" username is invalid",404
+				if queryUser(receiver) == False:
+					return "Pairing Error : "+receiver+" username is invalid",404
+				#Checking if pairing already exists
+				if verifyPairing(sender,receiver):
+					return "Pairing already exists",404
+				# Initiate Pairing
+				if insertPairRequest(sender,receiver):
+					return "Pairing Completed"
+			except:
+				return "Pairing creation exception", 404
+
+		elif type == "getPairs":
+			try:
+				args = request.get_json(force=True)
+				if args == None:
+					raise "JsonError"
+				receiver = args["receiver"]
+				# Checking if receiver account is active(not been deleted)			
+				if queryUser(receiver) == False:
+					return "Get Pairs Error : "+receiver+" username is invalid",404
+				pairs = getPairsRequest(receiver)
+				return jsonify(pairs)
+			except:
+				return "Get Pairs exception", 404	
+		
+		elif type == "removePairing":
+			try:
+				args = request.get_json(force=True)
+				if args == None:
+					raise "JsonError"
+				sender = args["sender"]
+				receiver = args["receiver"]
+				
+				# Checking if sender and receiver accounts are active(not been deleted)
+				if queryUser(sender) == False:
+					return "Remove Pairing Error : "+sender+" username is invalid",404
+				if queryUser(receiver) == False:
+					return "Remove Pairing Error : "+receiver+" username is invalid",404
+
+				#Checking if pairing already exists
+				if not verifyPairing(sender,receiver):
+					return "Pairing already deleted",404
+
+				# Initiate Pairing
+				if deletePairRequest(sender,receiver):
+					return "Pairing Deleted",404
+			except:
+				return "Pairing deletion exception", 404
+
+	def put(self):
 		try:
 			args = request.get_json(force=True)
 			if args == None:
 				raise "JsonError"
 			sender = args["sender"]
 			receiver = args["receiver"]
-			# Assuming that we don't have to ask receiver for permission when sender
-			# sends pairing request
-
 			# Checking if sender and receiver accounts are active(not been deleted)
 			if queryUser(sender) == False:
-				return "Pairing Error : "+sender+" has been deleted",404
+				return "Check Pairing Error : "+sender+" username is invalid",404
 			if queryUser(receiver) == False:
-				return "Pairing Error : "+receiver+" has been deleted",404
-
-			#Checking if pairing already exists
+				return "Check Pairing Error : "+receiver+" username is invalid",404
 			if verifyPairing(sender,receiver):
-				return "Pairing already exists"
-
-			# Initiate Pairing
-			if insertPairing(sender,receiver) and insertPairing(receiver,sender):
-				return "Pairing Completed"
+				return "Paired"
+			else:
+				return "Not Paired",404
 		except:
-			return "Pairing creation exception", 404
-
-	def put(self):
-		return "Invalid - Use POST", 404
+			return "Pairing Verification exception", 404
 
 	def delete(self):
 		try:
@@ -363,6 +409,6 @@ def index():
 api.add_resource(FileTransfer, "/api/ft", '/api/ft/<string:name>/<string:sender>/<string:filename>')
 api.add_resource(FilePending, "/api/fp", "/api/fp/<string:name>")
 api.add_resource(UserManager, "/api/um", "/api/um/<string:type>")#/<string:email>/<string:number>/<string:password>/<string:name>")
-api.add_resource(PairingManager, "/api/pm", "/api/pm/<string:sender>/<string:receiver>")
+api.add_resource(PairingManager, "/api/pm", "/api/pm/<string:type>")
 if __name__ == "__main__": 
 	app.run(debug=True)

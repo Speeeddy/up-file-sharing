@@ -114,21 +114,6 @@ def deleteUser(username):
 	db.close()	
 	return True if n == 1 else False	
 
-def insertPairing(sender, receiver):
-	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
-	try:
-		cursor = db.cursor()
-		sql = "INSERT INTO Pairing VALUES ('{}', '{}');".format(sender, receiver)
-		n = cursor.execute(sql)
-		db.commit()
-	except Exception as e:
-		print("DB error in insert pairing: " + str(e))
-		db.rollback()
-		db.close()
-		return False
-	db.close()	
-	return True	
-
 def verifyPairing(sender, receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
@@ -141,7 +126,7 @@ def verifyPairing(sender, receiver):
 		db.close()
 		return False
 	db.close()	
-	return True if n == 1 else False
+	return True if n > 0 else False
 
 def deletePairing(sender, receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
@@ -221,11 +206,11 @@ def incomingPairRequest(sender,receiver):
 	db.close()	
 	return True
 
-def outgoingPairRequest(receiver):
+def getPairsRequest(receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "Select SENDER FROM PairPending WHERE RECEIVER = BINARY '{}';".format(receiver)
+		sql = "Select SENDER FROM Pairing WHERE RECEIVER = BINARY '{}';".format(receiver)
 		n = cursor.execute(sql)
 		result = cursor.fetchall()
 	except Exception as e:
@@ -240,7 +225,7 @@ def deletePairRequest(sender,receiver):
 	db = pymysql.connect(host='localhost', user='root', password=dbPass, db='up')
 	try:
 		cursor = db.cursor()
-		sql = "DELETE FROM PairPending WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
+		sql = "DELETE FROM Pairing WHERE SENDER = BINARY '{}' AND RECEIVER = BINARY '{}';".format(sender, receiver)
 		n = cursor.execute(sql)
 		db.commit()
 	except Exception as e:

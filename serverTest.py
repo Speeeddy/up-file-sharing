@@ -21,19 +21,32 @@ class testMethods(unittest.TestCase):
 		# # receiver = "yasifx"
 		# filename = "giphy.gif"
 
-		URL = "https://up-karoon.ga/api/um/check"
-		req = requests.post(url = URL, json = { "username" : " ultra ,sidshas , yasifx,akash,kakka" } )
+		# URL = "https://up-karoon.ga/api/um/check"
+		# req = requests.post(url = URL, json = { "username" : " ultra ,sidshas , yasifx,akash,kakka" } )
+		# print(req.text)
+
+		DATA = { "sender" : "sidshas" , "receiver" : "akash" }
+		DATA2 = { "sender" : "ultra" , "receiver" : "akash" }
+		URL = "https://up-karoon.ga/api/pm"
+		
+		req = requests.put(url = URL, json = DATA2)
+		print(req.text)
+
+		req = requests.post(url = URL+"/startPairing", json = DATA2 )
+		print(req.text)
+
+		req = requests.post(url = URL+"/getPairs", json = DATA )
 		print(req.text)
 
 		# #Upload
-		filename = "heheehe.jpg"
-		f = open(filename,"rb")
-		URL = "https://up-karoon.ga/api/ft"
-		filedata = base64.b64encode(f.read())
-		f.close()
-		DATA = {"name":"sidshas", "sendto":"ultra,akash,nipun", "filename":filename, "data":filedata}	
-		req = requests.put(url = URL, json = DATA)
-		print(req.text)
+		# filename = "heheehe.jpg"
+		# f = open(filename,"rb")
+		# URL = "https://up-karoon.ga/api/ft"
+		# filedata = base64.b64encode(f.read())
+		# f.close()
+		# DATA = {"name":"sidshas", "sendto":"ultra,akash,nipun", "filename":filename, "data":filedata}	
+		# req = requests.put(url = URL, json = DATA)
+		# print(req.text)
 		
 		# # #Get Pending
 		# URL = "https://up-karoon.ga/api/fp/sidshas"
