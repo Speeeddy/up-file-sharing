@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  
+
+
+</style>
+<head>
+  <title>UP | Upload</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body background = "./images/inside.jpeg"  style="background-repeat: repeat;background-size: 20% ">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/" style="font-size: 2vw; font-weight: bold;">UP</a>
+    </div>
+     <a href="/logout" style="color: white ;float: right;font-size: 1.5vw;margin-top: 1%" class="active"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+      <p href="" class="active" style="margin-right:6% ;margin-top: 1%;font-size: 1.5vw;color: white ;float:right ;font-weight: bold;font-style: italic;" > <span class="glyphicon glyphicon-user"><%= name %></p>
+
+    <ul class="nav navbar-nav">
+       <li class="active" style="font-size: 1.5vw"><a href="/">Home</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+<div class="panel panel-primary class" style="width:48%;margin-top:5%;margin-left: 25%;height: 350px">
+  <h2 style="margin-left: 3%";font-weight:bold> UPload Files</h2>
+  <hr>
+  
+ <div class="panel-body">
+  <div style="margin-left: 7%">
+<form  action="/uploadfile" enctype="multipart/form-data" method="post">
+  File Upload:
+  <br><br>
+  <input type="file" name="filetoupload" required><br>
+  <input type="submit" value="Submit" style="position: relative; left: 200px">
+</form> 
+</div>
+</div>
+</div>
+
+</body>
+</html>
+
