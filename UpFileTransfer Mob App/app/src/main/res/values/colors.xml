@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3f4983</color>
+    <color name="colorPrimaryDark">#555fa3</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="darkgray">#6c6c6c</color>
+    <color name="cardview_light_background">#fffafafa</color>
+    <color name="colorBackground">#413e4f</color>
+    <color name="colorText">#000000</color>
+
+    <color name="slide1">#D50000</color>
+    <color name="slide2">#008e00</color>
+    <color name="slide3">#8e008e</color>
+    <color name="colorTextHint">#51d8c7</color>
+</resources>
