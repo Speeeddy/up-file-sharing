@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  
+  
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+    opacity:0.9;
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 8%;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top:0px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 0px;}
+    .sidenav a {font-size: 18px;}
+}
+
+
+</style>
+<head>
+  <title>UP | Upload</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body  background = "./images/inside.jpeg" style="background-size: 100% ;background-repeat: repeat;">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/" style="font-size: 2vw; font-weight: bold;">UP</a>
+    </div>
+     <a href="/logout" style="color: white ;float: right;font-size: 1.5vw;margin-top: 1%" class="active"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+      <p href="" class="active" style="margin-right:6% ;margin-top: 1%;font-size: 1.5vw;color: white ;float:right ;font-weight: bold;font-style: italic;" > <span class="glyphicon glyphicon-user"><%= name %></p>
+
+    <ul class="nav navbar-nav">
+       <li class="active" style="font-size: 1.5vw"><a href="/">Home</a></li>
+
+    </ul>
+  </div>
+</nav>
+<div class="sidenav" style="margin-top:0%">
+<h3 style="text-decoration:underline;color:white;margin-left:3%"> Paired Users</h3>
+
+  <% if(plist==false){ %>
+  <h3 style="margin-left:3%">No Paired User</h3>
+  <% }else{ %>
+ <% plist.forEach(function(file) { %>
+                     <a href="#about" onclick="clickx('<%= file %>')"><%= file %></a>
+
+                   
+                    <% }); %>
+
+   <% } %>
+</div>
+<div class="panel panel-primary class" style="width:48%;margin-top:5%;margin-left: 25%;height: 350px">
+
+  <h2 style="margin-left: 3%";font-weight:bold> UPload Files</h2>
+  <hr>
+  
+ <div class="panel-body">
+
+   <% if(e=='1'){ %>
+  <div class="alert alert-danger">
+  <strong>Incorrect !</strong> <%= error %>.
+</div>
+   <% } %>
+  <div style="margin-left: 7%">
+<form name="form" action="/receivernameverification" enctype="multipart/form-data" method="post">
+  Receiver Name:
+  <input type="text" name="receiver" placeholder="Receiver Name" required>
+  <br><br>
+  <input type="submit" value="Submit" style="position: relative; left: 200px">
+</form> 
+</div>
+</div>
+</div>
+
+</body>
+<script>
+oForm = document.forms[0];
+
+oForm.elements["receiver"].value="";
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+function clickx(a) {
+oForm = document.forms[0];
+if(oForm.elements["receiver"].value=="")
+{oForm.elements["receiver"].value=oForm.elements["receiver"].value+a
+}else{
+oForm.elements["receiver"].value=oForm.elements["receiver"].value+"," +a;
+}
+}
+</script>
+</html>
+

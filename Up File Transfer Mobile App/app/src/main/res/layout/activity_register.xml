@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient"
+    tools:context=".RegisterActivity">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/my_logo1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/white"/>
+
+    <EditText
+        android:background="#11000000"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/ic_action_user"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:id="@+id/rUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Username"
+        android:layout_marginTop="20dp"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:background="#11000000"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/ic_action_name"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:id="@+id/rEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Email"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName" />
+    <EditText
+        android:background="#11000000"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:drawableLeft="@drawable/ic_action_email"
+        android:padding="10dp"
+        android:id="@+id/rNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Number"
+        android:layout_marginTop="5dp"
+        android:inputType="number" />
+    <EditText
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_pass"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:id="@+id/rPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Password"
+        android:layout_marginTop="5dp"
+        android:inputType="textPassword" />
+    <EditText
+        android:drawableLeft="@drawable/ic_action_lol"
+        android:background="#11000000"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:padding="10dp"
+        android:id="@+id/rName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Name"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card"
+        app:cardBackgroundColor="@color/colorAccent"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:cardElevation="10dp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp" >>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/rRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/rLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="Already a User? Login."
+        />
+
+</LinearLayout>

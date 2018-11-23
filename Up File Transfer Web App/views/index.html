@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css">
+  .vl {
+    border-left: 6px solid green;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 15%;
+}
+
+
+</style>
+<head>
+  <title>UP | Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body  background = "./images/inside.jpeg" style="background-size: 100% ;background-repeat: repeat;">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/index" style="font-size: 2vw; font-weight: bold;">UP</a>
+    </div>
+
+    <a href="/logout" style="color: white ;float: right;font-size: 1.5vw;margin-top: 1%" class="active"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+      <p href="" class="active" style="margin-right:6% ;margin-top: 1%;font-size: 1.5vw;color: white ;float:right ;font-weight: bold;font-style: italic;" > <span class="glyphicon glyphicon-user"><%= name %></p>
+
+    <ul class="nav navbar-nav">
+      <li class="active" style="font-size: 1.5vw"><a href="/history">History</a></li>
+             <li class="active" style="font-size: 1.5vw"><a href="/pair">Pairing</a></li>
+              <li class="active" style="font-size: 1.5vw"><a href="/deletepair">Delete Pairing</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+
+<center style="margin-top: 10%">
+<a href="/upload" ><img border="0" alt="W3Schools" src="./images/up.png" width="200" height="200"></a>
+<a href="/dnload" style= "margin-left: 5%"  ><img border="0" alt="W3Schools" src="./images/down.png" width="200" height="200"></a>
+</center>
+
+
+</body>
+
+</html>
+
