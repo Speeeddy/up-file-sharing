@@ -29,8 +29,10 @@ button {
     <div class="navbar-header">
       <a class="navbar-brand" href="#" style="font-size: 2vw; font-weight: bold;">UP</a>
     </div>
-     <a href="/logout" style="color: white ;float: right;font-size: 1.5vw;margin-top: 1%" class="active"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+
+        <a href="/logout" style="color: white ;float: right;font-size: 1.5vw;margin-top: 1%" class="active"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
       <p href="" class="active" style="margin-right:6% ;margin-top: 1%;font-size: 1.5vw;color: white ;float:right ;font-weight: bold;font-style: italic;" > <span class="glyphicon glyphicon-user"><%= name %></p>
+
     <ul class="nav navbar-nav">
       <li class="active"><a href="/">Home</a></li>
 
@@ -39,17 +41,17 @@ button {
 </nav>
 
 <div class="panel panel-primary class" style="margin-left:30%;margin-right:30%;margin-top:5%;">
-   <h1 style="font-size:2vw;font-weight: bold;margin-left:40%;">Pairing</h1> 
+   <h1 style="font-size:2vw;font-weight: bold;margin-left:30%;">Delete Pairing</h1> 
    <hr>
   <div class="panel-body">
  <% if(e=='1'){ %>
   <div class="alert alert-danger">
-  <strong>Incorrect !</strong> Incorrect Username or already paired.
+  <strong>Incorrect !</strong> Incorrect Username or Not paired.
 </div>
    <% } %>
-    <form  action="/dopair" enctype="multipart/form-data" method="post">
+    <form  action="/deletepair" enctype="multipart/form-data" method="post">
       <div class="form-group">
-  <label for="usr">Friend's User Name:</label>
+  <label for="usr">Paired User's Name:</label>
    <input class="form-control" type="text" name="receiver" required>
  </div>
   <input type="submit" value="Submit" style="    background-color: #4CAF50;

@@ -140,6 +140,7 @@ router.post('/receivernameverification',function(req,res)  {
 	var httpsGetList = https.request(fileReceiveListOptions,(resp) => {
   console.log(`statusCode: ${res.statusCode}`)
   resp.on('data', (d) => {
+    var erdata=d;
     console.log("test"+d.toString("utf8"));
     if(JSON.parse(d.toString("utf8"))=="User exists"){
     console.log("passed");
@@ -174,8 +175,8 @@ bodyString = JSON.stringify(bodyString);
     console.log(d)
   })
     rese.on('end', (d) => {
-    console.log(dat);
-      	res.render('upload',{name:req.session.username,e:"1",plist:JSON.parse(dat)});
+    console.log(erdata);
+      	res.render('upload',{name:req.session.username,e:"1",plist:JSON.parse(dat),error:JSON.parse(erdata.toString("utf8"))});
 
   })
  
@@ -550,7 +551,7 @@ bodyString = JSON.stringify(bodyString);
       res.render("success",{name:req.session.username})
   	}
   	else{
-  		res.render('pair',{e:"1"});
+  		res.render('pair',{e:"1",name:req.session.username});
   	}
   })
   rese.on('error', (d) => {
@@ -568,7 +569,98 @@ httpsPost.end()
 
     }
     else{
-    res.render('pair',{e:"1"});    }
+    res.render('pair',{e:"1",name:req.session.username});    }
+
+
+  })
+  resp.on('error', (d) => {
+    console.log(d)
+  })
+})
+httpsGetList.write(JSON.stringify(dat))
+httpsGetList.end()
+
+})
+
+
+
+router.get('/deletepair',function(req,res){
+res.render('deletePair',{e:"0",name:req.session.username});
+
+  })
+
+
+router.post('/deletepair',function(req,res)  {
+
+ var dat={
+  "username":req.body.receiver
+}
+  var fileReceiveListOptions = {
+  host: 'up-karoon.ga',
+  port: 443,
+  path: '/api/um/check',
+  method: 'POST'
+  }
+  console.log("SEnding GET");
+  var resp=res;
+  var httpsGetList = https.request(fileReceiveListOptions,(resp) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  resp.on('data', (d) => {
+    console.log("test"+d.toString("utf8"));
+    if(JSON.parse(d.toString("utf8"))=="User exists"){
+    console.log("passed");
+    
+
+
+
+
+
+var bodyString = {
+  "receiver": req.session.username,
+  "sender": req.body.receiver ,
+}
+
+console.log("delete req - "+ JSON.stringify(bodyString));
+bodyString = JSON.stringify(bodyString);
+
+  var fileUploadOptions = {
+  host: 'up-karoon.ga',
+  port: 443,
+  headers: {'Content-Type': 'application/json'},
+  path: '/api/pm/removePairing',
+  method: 'POST',
+}
+
+
+  console.log("SEnding pair");
+  var httpsPost = https.request(fileUploadOptions,(rese) => {
+  console.log(`statusCode for pairing: ${rese.statusCode}`)
+
+  rese.on('data', (d) => {
+  
+    if(JSON.parse(d.toString("utf8"))=="Pairing Deleted"){
+      res.render("success",{name:req.session.username})
+    }
+    else{
+      res.render('deletePair',{e:"1",name:req.session.username});
+    }
+  })
+  rese.on('error', (d) => {
+    console.log(d)
+  })
+ 
+})
+
+
+httpsPost.write(bodyString)
+httpsPost.end()
+
+
+
+
+    }
+    else{
+    res.render('deletePair',{e:"1",name:req.session.username});    }
 
 
   })

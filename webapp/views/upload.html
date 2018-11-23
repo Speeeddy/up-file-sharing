@@ -8,15 +8,16 @@ body {
 }
 
 .sidenav {
+    opacity:0.9;
     height: 100%;
-    width: 160px;
+    width: 200px;
     position: fixed;
     z-index: 1;
     top: 8%;
     right: 0;
     background-color: #111;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top:0px;
 }
 
 .sidenav a {
@@ -38,7 +39,7 @@ body {
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
+    .sidenav {padding-top: 0px;}
     .sidenav a {font-size: 18px;}
 }
 
@@ -52,8 +53,7 @@ body {
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body background = "./images/inside.jpeg" style="background-repeat: repeat; background-size: 20% ;">
-
+<body  background = "./images/inside.jpeg" style="background-repeat: repeat; background-size: 20% ;">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -69,9 +69,11 @@ body {
     </ul>
   </div>
 </nav>
-<div class="sidenav">
+<div class="sidenav" style="margin-top:0%">
+<h3 style="text-decoration:underline;color:white;margin-left:3%"> Paired Users</h3>
+
   <% if(plist==false){ %>
-  <a href="#about">No Paired User</a>
+  <h3 style="margin-left:3%">No Paired User</h3>
   <% }else{ %>
  <% plist.forEach(function(file) { %>
                      <a href="#about" onclick="clickx('<%= file %>')"><%= file %></a>
@@ -90,7 +92,7 @@ body {
 
    <% if(e=='1'){ %>
   <div class="alert alert-danger">
-  <strong>Incorrect !</strong> Incorrect Receiver Name.
+  <strong>Incorrect !</strong> <%= error %>.
 </div>
    <% } %>
   <div style="margin-left: 7%">
@@ -106,13 +108,18 @@ body {
 
 </body>
 <script>
+oForm = document.forms[0];
+
+oForm.elements["receiver"].value="";
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
 function clickx(a) {
 oForm = document.forms[0];
-oForm.elements["receiver"].value=a;
-oForm.submit();
+if(oForm.elements["receiver"].value=="")
+{oForm.elements["receiver"].value=oForm.elements["receiver"].value+a
+}else{
+oForm.elements["receiver"].value=oForm.elements["receiver"].value+"," +a;
 }
-
+}
 </script>
 </html>
 
