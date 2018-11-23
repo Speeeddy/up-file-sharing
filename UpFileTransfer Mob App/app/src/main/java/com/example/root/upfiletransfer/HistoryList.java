@@ -2,14 +2,18 @@ package com.example.root.upfiletransfer;
 
 public class HistoryList {
 
-    private String name ;
+    private String sender ;
+    private String receiver ;
     private String filename ;
     private String timestamp ;
     private String action ;
 
 
-    public void setName(String s){
-        this.name = s ;
+    public void setSender(String s){
+        this.sender = s ;
+    }
+    public void setReceiver(String s){
+        this.receiver = s ;
     }
     public void setFilename(String s){
         this.filename = s ;
@@ -24,8 +28,8 @@ public class HistoryList {
     public String getTimestamp(){
         return timestamp ;
     }
-    public String getName(){
-        return name ;
+    public String getReceiver(){
+        return receiver ;
     }
     public String getFilename(){
         return filename ;
@@ -33,9 +37,10 @@ public class HistoryList {
     public String getAction(){
         return action ;
     }
+    public String getSender(){return sender;}
 
     @Override
     public String toString() {
-        return "\nSender/Receiver : " + getName() + "\n" + "Filename : " + getFilename() + "\n" + "Time : " + getTimestamp() + "\n" + "Action : " + getAction() + "\n";
+        return "\nSender : " + getSender() + "\n" + "Receiver : " + getReceiver() + "\n" + "Filename : " + getFilename() + "\n" + "Time : " + getTimestamp() + "\n" + "Action : " + getAction() + "\n";
     }
 }

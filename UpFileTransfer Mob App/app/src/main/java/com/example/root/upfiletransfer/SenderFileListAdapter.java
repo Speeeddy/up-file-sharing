@@ -1,6 +1,7 @@
 package com.example.root.upfiletransfer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ public class SenderFileListAdapter extends ArrayAdapter<File> {
         }
 
         TextView tvFileName = (TextView) view.findViewById(R.id.tvFileName);
-        TextView tvFileSentPercentage = (TextView) view.findViewById(R.id.tvFileSentPercentage);
+//        TextView tvFileSentPercentage = (TextView) view.findViewById(R.id.tvFileSentPercentage);
         TextView tvTimeTaken = (TextView) view.findViewById(R.id.tvTimeTaken);
         ImageView ivFileType = (ImageView) view.findViewById(R.id.ivFileType);
 
@@ -50,7 +51,7 @@ public class SenderFileListAdapter extends ArrayAdapter<File> {
             tvFileName.setText(senderFileProgress.getFile().getName());
             System.out.println(senderFileProgress.getFileSize());
             if (senderFileProgress.getFileSize() != 0) {
-                tvFileSentPercentage.setText("Uploading...");
+//                tvFileSentPercentage.setText("Uploading...");
 //                tvFileSentPercentage.setText((senderFileProgress.getBytesSent() / senderFileProgress.getFileSize() * 100 + "% sent"));
             }
             if (senderFileProgress.getTimeTaken() != 0) {

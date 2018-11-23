@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/logoutSR" android:title="Logout" android:icon="@drawable/signout"/>
     <item android:id="@+id/historySR" android:title="History" android:icon="@drawable/history"/>
     <item android:id="@+id/pairing" android:title="Pair" android:icon="@drawable/pair" />
     <item android:id="@+id/deleting" android:title="Remove Pairing" android:icon="@drawable/deletepairing" />
+    <item android:id="@+id/logoutSR" android:title="Logout" android:icon="@drawable/signout"/>
 
 </menu>

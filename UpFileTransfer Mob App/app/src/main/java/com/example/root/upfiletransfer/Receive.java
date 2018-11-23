@@ -9,11 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
@@ -22,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,9 +141,27 @@ public class Receive extends AppCompatActivity {
 //                String url = url1 + username ;
 //                new JSONTask().execute(url) ;
 //            }
+            if(lists == null){
+                Toast.makeText(getApplicationContext() , "No Pending Files!" , Toast.LENGTH_LONG).show() ;
+                Intent i = new Intent(Receive.this , SendReceive.class) ;
+                i.putExtra("username" , username) ;
+                startActivity(i) ;
+                finish() ;
+            }
             try {
                 ArrayAdapter adapter = new ArrayAdapter(Receive.this, android.R.layout.simple_list_item_1
-                        , lists);
+                        , lists){
+                    @NonNull
+                    @Override
+                    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        TextView tv = (TextView) view.findViewById(android.R.id.text1);
+//                        tv.setGravity(Gravity.CENTER);
+                        tv.setTextColor(Color.WHITE);
+                        tv.setTypeface(null , Typeface.BOLD);
+                        return view;
+                    }
+                };
                 fileListAdapter = new CustomAdapter(R.layout.file_list_item, lists);
 
                 lv.setAdapter(adapter);
@@ -505,5 +528,13 @@ public class Receive extends AppCompatActivity {
 
             return v;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Receive.this , SendReceive.class) ;
+        i.putExtra("username" , username) ;
+        startActivity(i) ;
+        finish() ;
     }
 }

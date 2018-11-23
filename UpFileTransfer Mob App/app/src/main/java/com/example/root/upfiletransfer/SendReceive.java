@@ -177,6 +177,7 @@ public class SendReceive extends AppCompatActivity implements NavigationView.OnN
                 Intent i = new Intent(SendReceive.this , Receive.class);
                 i.putExtra("username" , username);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -487,6 +488,7 @@ public class SendReceive extends AppCompatActivity implements NavigationView.OnN
                 Intent i = new Intent(SendReceive.this , History.class) ;
                 i.putExtra("username" , username) ;
                 startActivity(i) ;
+                finish();
                 break ;
             }
 

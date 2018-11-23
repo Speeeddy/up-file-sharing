@@ -1,16 +1,23 @@
 package com.example.root.upfiletransfer;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -103,9 +110,9 @@ public class History extends AppCompatActivity {
                     JSONArray inner = parentArray.optJSONArray(i) ;
                     Log.d("inner" , inner.toString()) ;
                     HistoryList inn = new HistoryList();
-                    inn.setName(inner.getString(0));
+                    inn.setSender(inner.getString(0));
                     Log.d("inner1" , inner.getString(0)) ;
-
+                    inn.setReceiver(inner.getString(1));
                     inn.setFilename(inner.getString(2));
                     Log.d("inner2" , inner.getString(2)) ;
 
@@ -124,8 +131,28 @@ public class History extends AppCompatActivity {
 //                    ret.add(inn) ;
 //                    Log.d("HELLO" , inn.getFilename()) ;
                 }
+
+                if(ret == null){
+                    Toast.makeText(getApplicationContext() , "No File Transfer History!" , Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(History.this , SendReceive.class) ;
+                    i.putExtra("username" , username) ;
+                    startActivity(i) ;
+                    finish() ;
+                }
+
                 ArrayAdapter adapter = new ArrayAdapter(History.this, android.R.layout.simple_list_item_1
-                        , ret);
+                        , ret){
+                    @NonNull
+                    @Override
+                    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        TextView tv = (TextView) view.findViewById(android.R.id.text1);
+//                        tv.setGravity(Gravity.CENTER);
+//                        tv.setTextColor(Color.WHITE);
+                        tv.setTypeface(null , Typeface.BOLD);
+                        return view ;
+                    }
+                };
 //                fileListAdapter = new Receive.CustomAdapter(R.layout.file_list_item, lists);
                 lv.setAdapter(adapter);
             } catch (JSONException e) {
@@ -160,5 +187,13 @@ public class History extends AppCompatActivity {
             Log.d("JWP" , e.toString());
         }
         return "UNABLE TO CONTACT SERVER";
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(History.this , SendReceive.class) ;
+        i.putExtra("username" , username) ;
+        startActivity(i) ;
+        finish();
     }
 }

@@ -1,21 +1,28 @@
 package com.example.root.upfiletransfer;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -289,7 +296,18 @@ public class PeerChooserActivity extends AppCompatActivity {
 //                    Log.d("HELLO" , inn.getFilename()) ;
                 }
                 ArrayAdapter adapter = new ArrayAdapter(PeerChooserActivity.this, android.R.layout.simple_list_item_1
-                        , ret);
+                        , ret){
+                    @NonNull
+                    @Override
+                    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        TextView tv = (TextView) view.findViewById(android.R.id.text1);
+//                        ImageView iv = (ImageView) view.findViewById(android.R.id.icon) ;
+                        tv.setGravity(Gravity.CENTER);
+                        tv.setTextColor(Color.WHITE);
+                        return view ;
+                    }
+                };
 //                fileListAdapter = new Receive.CustomAdapter(R.layout.file_list_item, lists);
                 lv.setAdapter(adapter);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

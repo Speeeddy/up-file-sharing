@@ -100,6 +100,8 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext() , "Invalid Credentials" , Toast.LENGTH_LONG).show();
                 }else if(!isValidEmail(rEmail.getText().toString())){
                     Toast.makeText(getApplicationContext() , "Invalid Email Address" , Toast.LENGTH_LONG).show();
+                }else if(rNumber.getText().toString().length() < 10){
+                    Toast.makeText(getApplicationContext() , "Invalid Phone Number" , Toast.LENGTH_LONG).show();
                 }else{
                     JSONObject jsonObject = new JSONObject() ;
                     try {
