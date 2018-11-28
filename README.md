@@ -1,4 +1,4 @@
-# up-file-sharing [![Build Status](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME}.png?branch=master)](https://travis-ci.com/Speeeddy/up-file-sharing)
+# up-file-sharing [![Build Status](https://travis-ci.com/Speeeddy/up-file-sharing.svg?branch=master)](https://travis-ci.com/Speeeddy/up-file-sharing)
 The repository for Up, the android-web-application for seamless file transfers. This is part of Software Engineering course at BITS Goa. The project was presented successfully in class on 28th November, 2018.
 
 Since the project has been submitted, the source code files have been put into consolidated folders for storage and future reference. This repository was actively used during the production.
