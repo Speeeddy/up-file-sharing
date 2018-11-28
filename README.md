@@ -4,8 +4,8 @@ The repository for Up, the android-web-application for seamless file transfers. 
 Since the project has been submitted, the source code files have been put into consolidated folders for storage and future reference. This repository was actively used during the production.
 
 Developers:
-Akash Shekhawat
-Lav Vijayvargiya
-Nipun Sood
-Siddharth Shah
-Yasif Khan
+* Akash Shekhawat
+* Lav Vijayvargiya
+* Nipun Sood
+* Siddharth Shah
+* Yasif Khan
